@@ -23,9 +23,7 @@ func Router() *gin.Engine {
 
 	r.POST("/holder", ctrl.CreateHolder)
 	r.GET("/holder", ctrl.FetchHolders)
-	// r.GET("/holder/document/:document", holder.FindHolderByDocument)
 	r.PATCH("/holder/id/:id", ctrl.EditHolder)
-	// r.DELETE("/holder/document/:document", holder.DeleteHolder)
 
 	return r
 }

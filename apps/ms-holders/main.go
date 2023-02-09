@@ -1,24 +1,26 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/oivinig/vinigbank/apps/msholders/adapter"
 	"github.com/spf13/viper"
 )
 
 func main() {
 	r := adapter.Router()
+	readConfig()
+	port := viper.GetString("PORT")
 
-	//FIXME: read all configs from .env file
-	viper.SetDefault("PGHOST", "0.0.0.0")
-	viper.SetDefault("PGUSER", "postgres")
-	viper.SetDefault("PGPASSWORD", "postgres")
-	viper.SetDefault("HOSTNAME", "vinigbank-ms-holders")
-	viper.SetDefault("HOST", "localhost")
+	r.Run(fmt.Sprintf(":%v", port))
+}
 
-	viper.BindEnv("PGHOST", "PGHOST")
-	viper.BindEnv("PGUSER", "PGUSER")
-	viper.BindEnv("PGPASSWORD", "PGPASSWORD")
-	viper.BindEnv("HOSTNAME", "HOSTNAME")
-	viper.BindEnv("HOST", "HOST")
-	r.Run(":8001")
+func readConfig() {
+	viper.SetConfigType("env")
+	viper.AddConfigPath(".")
+	viper.SetConfigFile(".env")
+	err := viper.ReadInConfig()
+	if err != nil {
+		panic(fmt.Errorf("fatal error config file: %w", err))
+	}
 }
